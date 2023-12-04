@@ -1,14 +1,19 @@
 import { CONFIG } from "lib/config";
 
+const isInIframe = window.self !== window.top;
+
 export function goHome() {
-  if (window.parent) {
+  if (isInIframe) {
     window.parent.postMessage("closePortal", "*");
   } else {
-    if (CONFIG.NETWORK === "mainnet") {
-      window.location.href = "https://sunflower-land.com/play";
-      return;
-    }
+    window.location.href = CONFIG.PORTAL_GAME_URL;
+  }
+}
 
-    window.location.href = "https://sunflower-land.com/testnet";
+export function authorisePortal() {
+  if (isInIframe) {
+    window.parent.postMessage("closePortal", "*");
+  } else {
+    window.location.href = `${CONFIG.PORTAL_GAME_URL}?portal=${CONFIG.PORTAL_APP}&redirect=${window.location.origin}`;
   }
 }
