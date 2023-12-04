@@ -4,7 +4,7 @@ name: Portal deploy
 on:
   push:
     branches:
-      - feat/portal-adventure
+      - main
 
 jobs:
   deploy:
@@ -32,11 +32,12 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=6144
           CI: false
 
-          VITE_PORTAL_APP: "infected"
+          VITE_PORTAL_APP: "crop-boom"
           VITE_CLIENT_VERSION: ${{ steps.date.outputs.date }}
           VITE_RELEASE_VERSION: ${{ steps.get_version.outputs.VERSION }}
           VITE_PRIVATE_IMAGE_URL: "https://sunflower-land.com/game-assets"
           VITE_API_URL: "https://api-dev.sunflower-land.com"
+          VITE_ROOM_URL: "wss://mmo-dev.sunflower-land.com"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.5.9
@@ -46,7 +47,4 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: Deploy static site to S3 subdomain
-        run: aws s3 sync ./dist/ s3://infected.sunflower-land.com --delete
-
-      - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./dist/ s3://www.infected.sunflower-land.com --delete
+        run: aws s3 sync ./dist/ s3://crop-boom.sunflower-land.com --delete
